@@ -2,11 +2,15 @@
   "name": "v3d-core",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "AGPL-3.0-or-later"
+  "author": "Phantom Development",
+  "license": "MPL-2.0",
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
 }
