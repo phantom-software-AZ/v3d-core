@@ -1,0 +1,6 @@
+[submodule "importer/babylon-vrm-loader"]
+	path = src/importer/babylon-vrm-loader
+	url = https://github.com/phantom-software-AZ/babylon-vrm-loader.git
+[submodule "src/shader/babylon-mtoon-material"]
+	path = src/shader/babylon-mtoon-material
+	url = https://github.com/phantom-software-AZ/babylon-mtoon-material.git
