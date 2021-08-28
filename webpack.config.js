@@ -1,5 +1,3 @@
-// import { createRequire } from 'module';
-// const require = createRequire(import.meta.url);
 import * as path from 'path';
 import * as webpack from 'webpack';
 import { merge } from 'webpack-merge';
@@ -56,12 +54,16 @@ const config = [
         //     /^@babylonjs.*$/,
         // ],
         optimization: {
-            minimize: false,
             splitChunks: {
                 cacheGroups: {
-                    vendor: {
+                    babylonjs: {
                         test: /[\\/]node_modules[\\/]@babylonjs[\\/]/,
                         name: 'babylonjs',
+                        chunks: 'all',
+                    },
+                    cannonjs: {
+                        test: /[\\/]node_modules[\\/]cannon(-es)?[\\/]/,
+                        name: 'cannonjs',
                         chunks: 'all',
                     },
                 },
