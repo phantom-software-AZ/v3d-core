@@ -25,10 +25,12 @@
     "webpack-dev-server": "^4.0.0"
   },
   "dependencies": {
-    "@babylonjs/core": "^4.2.0",
-    "@babylonjs/inspector": "^4.2.0",
-    "@babylonjs/loaders": "^4.2.0",
-    "@babylonjs/materials": "^4.2.0",
+    "@babylonjs/core": "file:lib/Babylon.js/.temp/packageES6/core",
+    "@babylonjs/gui": "file:lib/Babylon.js/.temp/packageES6/gui",
+    "@babylonjs/inspector": "file:lib/Babylon.js/.temp/packageES6/inspector",
+    "@babylonjs/loaders": "file:lib/Babylon.js/.temp/packageES6/loaders",
+    "@babylonjs/materials": "file:lib/Babylon.js/.temp/packageES6/materialsLibrary",
+    "@babylonjs/serializers": "file:lib/Babylon.js/.temp/packageES6/serializers",
     "cannon-es": "^0.18.0"
   },
   "sideEffects": [

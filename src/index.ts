@@ -32,7 +32,7 @@ import {TorusKnotBuilder} from "@babylonjs/core/Meshes/Builders/torusKnotBuilder
 import {MToonMaterial} from "babylon-mtoon-material/src";
 import {Texture} from "@babylonjs/core/Materials/Textures/texture";
 import {Material} from "@babylonjs/core/Materials/material";
-import {VertexBuffer} from "@babylonjs/core/Meshes/buffer";
+import {VertexBuffer} from "@babylonjs/core/Buffers/buffer";
 import {AmmoJSPlugin, BoxBuilder, CannonJSPlugin, PhysicsImpostor, PhysicsImpostorParameters} from "@babylonjs/core";
 import {Mesh} from "@babylonjs/core/Meshes/mesh";
 

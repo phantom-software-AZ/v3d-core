@@ -29,6 +29,12 @@ const config = {
                 test: /\.ts$/,
                 use: 'ts-loader',
             },
+            {
+                test: /\.m?js$/,
+                resolve: {
+                    fullySpecified: false,
+                },
+            },
         ],
     },
     resolve: {
@@ -38,6 +44,7 @@ const config = {
             "babylon-vrm-loader": path.resolve(__dirname, "src/importer/babylon-vrm-loader"),
             "babylon-mtoon-material": path.resolve(__dirname, "src/shader/babylon-mtoon-material")
         },
+        symlinks: false,
     },
     experiments: {
         topLevelAwait: true,
