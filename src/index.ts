@@ -45,7 +45,7 @@ if (Engine.isSupported()) {
     engine = new Engine(canvas, true);
 }
 
-VRMLoader.loadVrmManager();
+VRMLoader.registerVrmManager();
 
 // vrmFile is File object retrieved by <input type="file">.
 const fileInput = document.getElementById('select-file') as HTMLInputElement;
