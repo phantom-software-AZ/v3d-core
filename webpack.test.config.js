@@ -66,11 +66,6 @@ const config = {
                     name: 'babylonjs',
                     chunks: 'all',
                     },
-                cannonjs: {
-                    test: /[\\/]node_modules[\\/]cannon(-es)?[\\/]/,
-                    name: 'cannonjs',
-                    chunks: 'all',
-                },
             },
         },
     },

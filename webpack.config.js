@@ -3,13 +3,16 @@ import * as webpack from 'webpack';
 import { merge } from 'webpack-merge';
 import { fileURLToPath } from 'url';
 import {resolve} from "path";
+import terser from 'terser-webpack-plugin';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const baseConfig = {
     mode: 'production',
-    entry: path.resolve(__dirname, 'src', 'index'),
+    entry: {
+        v3dcore: path.resolve(__dirname, 'src', 'index'),
+    },
     module: {
         rules: [
             {
@@ -41,7 +44,10 @@ const baseConfig = {
         topLevelAwait: true,
     },
     optimization: {
-        minimize: false,
+        minimize: true,
+        minimizer: [new terser({
+            extractComments: false,
+        })]
     },
     target: ['web'],
 };
@@ -66,11 +72,6 @@ const config = [
                     babylonjs: {
                         test: /[\\/]node_modules[\\/]@babylonjs[\\/]/,
                         name: 'babylonjs',
-                        chunks: 'all',
-                    },
-                    cannonjs: {
-                        test: /[\\/]node_modules[\\/]cannon(-es)?[\\/]/,
-                        name: 'cannonjs',
                         chunks: 'all',
                     },
                 },

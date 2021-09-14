@@ -215,3 +215,5 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         }
     };
 }
+
+export default V3DCore;

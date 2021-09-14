@@ -5,10 +5,6 @@ import "@babylonjs/core/Loading/Plugins/babylonFileLoader";
 import "@babylonjs/core/Materials";
 import "@babylonjs/loaders/glTF/glTFFileLoader";
 
-// Debug
-import "@babylonjs/core/Debug";
-import "@babylonjs/gui";
-import "@babylonjs/inspector";
 import {Scene} from "@babylonjs/core/scene";
 import {Engine} from "@babylonjs/core/Engines/engine";
 import {Color3, Vector3} from "@babylonjs/core/Maths/math";
@@ -26,7 +22,6 @@ const fileInput = document.getElementById('select-file') as HTMLInputElement;
 
 fileInput.onchange = async (e) => {
     console.log("Onload");
-    // debugger;
     const vrmFile = fileInput.files?.[0];
 
     // Create v3d core

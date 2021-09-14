@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "index.js",
+  "main": "dist/v3dcore.es6.js",
   "scripts": {
     "test": "echo \\\"Error: no test2 specified\\\" && exit 1",
-    "build": "webpack",
+    "build": "webpack --config webpack.config.js",
     "lint": "tslint -p .",
     "debug": "webpack-dev-server --config webpack.test.config.js"
   },
@@ -18,6 +18,7 @@
     "@types/react": "^17.0.19",
     "@types/react-dom": "^17.0.9",
     "@types/webpack": "^5.28.0",
+    "terser-webpack-plugin": "^5.2.4",
     "ts-loader": "^9.2.5",
     "typescript": "^4.3.5",
     "webpack": "^5.51.1",
@@ -30,11 +31,6 @@
     "@babylonjs/inspector": "file:lib/Babylon.js/.temp/packageES6/inspector",
     "@babylonjs/loaders": "file:lib/Babylon.js/.temp/packageES6/loaders",
     "@babylonjs/materials": "file:lib/Babylon.js/.temp/packageES6/materialsLibrary",
-    "@babylonjs/serializers": "file:lib/Babylon.js/.temp/packageES6/serializers",
-    "cannon-es": "^0.18.0"
-  },
-  "sideEffects": [
-    "dist/index.js",
-    "dist/index.module.js"
-  ]
+    "@babylonjs/serializers": "file:lib/Babylon.js/.temp/packageES6/serializers"
+  }
 }
