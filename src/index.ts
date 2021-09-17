@@ -12,6 +12,8 @@ import {
 } from "babylon-vrm-loader/src";
 import { GLTFLoader } from "@babylonjs/loaders/glTF/2.0";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
+import {EventState, IShadowLight, Light, ShadowGenerator } from "@babylonjs/core";
+import {isIShadowLight} from "./utilities/types";
 
 
 export class V3DCore implements GLTFLoaderExtensionObserver {
@@ -21,11 +23,23 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      * @private
      */
     private _vrmFileLoader = new VRMFileLoader();
+    /**
+     * Shadow generators
+     */
+    private _shadowGenerators:
+        Map<IShadowLight, ShadowGenerator> =
+        new Map<IShadowLight, ShadowGenerator>();
 
     /**
      * Callbacks when loading is done
      */
     private _onLoadCompleteCallbacks: Function[] = [];
+    private _managerRenderFunc:
+        (eventData: Scene, eventState: EventState) => void = () => {
+        for (const manager of this.loadedVRMManagers) {
+            manager.update(this.engine.getDeltaTime());
+        }
+    };
     public addOnLoadCompleteCallbacks(callback: Function): void {
         this._onLoadCompleteCallbacks.push(callback);
     }
@@ -41,14 +55,19 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         this._onLoadCompleteCallbacks = [];
     }
 
+    public updateManagerRenderFunction(
+        func: (eventData: Scene, eventState: EventState) => void) {
+        this._managerRenderFunc = func;
+    }
+
     /**
      * Loaded VRM Managers
      * @private
      */
-    private _loadedVRMManagers: VRMManager[] = [];
+    public loadedVRMManagers: VRMManager[] = [];
     public addVRMManager(manager: VRMManager) {
         if (manager)
-            this._loadedVRMManagers.push(manager);
+            this.loadedVRMManagers.push(manager);
     }
 
     /**
@@ -56,8 +75,8 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      * @param idx
      */
     public getVRMManagerByIndex(idx: number) {
-        return (idx >= 0 && idx < this._loadedVRMManagers.length)
-            ? this._loadedVRMManagers[idx]
+        return (idx >= 0 && idx < this.loadedVRMManagers.length)
+            ? this.loadedVRMManagers[idx]
             : null;
     }
 
@@ -70,7 +89,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
     // VRM doesn't have any UID in metadata. Title can be unfilled too.
     // Filename is the only reasonable ID.
     public getVRMManagerByURI(uri: String) {
-        for (const manager of this._loadedVRMManagers) {
+        for (const manager of this.loadedVRMManagers) {
             if (manager.uri === uri)
                 return manager;
         }
@@ -151,6 +170,32 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         manager.appendCamera(camera);
     }
 
+    /**
+     * Enable shadow caster for light.
+     * @param light Light to enable shadows.
+     */
+    public enableShabows(light?: IShadowLight) {
+        if (light && this._shadowGenerators.has(light)) {
+            const shadowGenerator = new ShadowGenerator(1024, light);
+            this._shadowGenerators.set(light, shadowGenerator);
+        } else {
+            for (const l of this.scene.lights) {
+                if (isIShadowLight(l)) {
+                    const shadowGenerator = new ShadowGenerator(1024, l);
+                    this._shadowGenerators.set(l, shadowGenerator);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get corresponding shadow generator for light.
+     * @param light Light to get shadow generator
+     */
+    public getShadownGenerator(light: IShadowLight) {
+        return this._shadowGenerators.get(light);
+    }
+
     // Don't make wrappers static, so plugins will always be registered
     /**
      * Wrapper for SceneLoader.AppendAsync.
@@ -189,11 +234,11 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      */
     private setupSecodaryAnimation() {
         // Update secondary animation
-        this.scene.onBeforeRenderObservable.add(() => {
-            for (const manager of this._loadedVRMManagers) {
-                manager.update(this.engine.getDeltaTime());
+        this.scene.onBeforeRenderObservable.add(
+            (eventData: Scene, eventState: EventState) => {
+                this._managerRenderFunc(eventData, eventState);
             }
-        });
+        );
     }
 
     private enableResize() {
