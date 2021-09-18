@@ -14,6 +14,8 @@ import { GLTFLoader } from "@babylonjs/loaders/glTF/2.0";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import {EventState, IShadowLight, Light, ShadowGenerator } from "@babylonjs/core";
 import {isIShadowLight} from "./utilities/types";
+import {v3DSceneOptimizer} from "./scene/optimizer";
+import {v3DSkyBox} from "./scene/skybox";
 
 
 export class V3DCore implements GLTFLoaderExtensionObserver {
@@ -34,12 +36,6 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      * Callbacks when loading is done
      */
     private _onLoadCompleteCallbacks: Function[] = [];
-    private _managerRenderFunc:
-        (eventData: Scene, eventState: EventState) => void = () => {
-        for (const manager of this.loadedVRMManagers) {
-            manager.update(this.engine.getDeltaTime());
-        }
-    };
     public addOnLoadCompleteCallbacks(callback: Function): void {
         this._onLoadCompleteCallbacks.push(callback);
     }
@@ -55,10 +51,22 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         this._onLoadCompleteCallbacks = [];
     }
 
+    private _managerRenderFunc:
+        (eventData: Scene, eventState: EventState) => void = () => {
+        for (const manager of this.loadedVRMManagers) {
+            manager.update(this.engine.getDeltaTime());
+        }
+    };
+
     public updateManagerRenderFunction(
         func: (eventData: Scene, eventState: EventState) => void) {
         this._managerRenderFunc = func;
     }
+
+    private _cameraOnBeforeRenderFunc: Function[] = [];
+    private _sceneOptimizer;
+
+    public skyBox: v3DSkyBox = null;
 
     /**
      * Loaded VRM Managers
@@ -111,6 +119,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
 
         this.setupSecodaryAnimation();
         this.enableResize();
+        this._sceneOptimizer = new v3DSceneOptimizer(this.scene);
     }
 
     /**
@@ -135,6 +144,10 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         this.scene.clearColor = Color4.FromColor3(color, this.scene.clearColor.a);
     }
 
+    /**
+     * Add an ambient light.
+     * @param color color of the light
+     */
     public addAmbientLight(color?: Color3) {
         const light = new HemisphericLight(
             "V3DHemiLight",
@@ -145,8 +158,29 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
     }
 
     /**
-     * Attach a following camera to VRM model.
+     * Add a basic arc rotate camera to scene.
      * TODO: there seems to be a bug when meshes are near the edge of camera cone
+     * Probably has something to do with culling
+     * @param radius rotation radius
+     */
+    public addCamera(
+        radius: number = 3,
+    ) {
+        const camera = new ArcRotateCamera(
+            'V3DMainCamera',
+            0, 0, radius,
+            new Vector3(0, 0, 0),
+            this.scene, true);
+        camera.lowerRadiusLimit = 0.1;
+        camera.upperRadiusLimit = 20;
+        camera.wheelDeltaPercentage = 0.05;
+        camera.minZ = 0;
+        camera.setPosition(new Vector3(0, 1.5, -5));
+        camera.attachControl(this.engine.getRenderingCanvas());
+    }
+
+    /**
+     * Attach a arc rotate following camera to VRM model.
      * Probably has something to do with culling
      * @param manager VRM Manager to attach the camera to
      * @param radius rotation radius
@@ -168,6 +202,26 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         camera.attachControl(this.engine.getRenderingCanvas());
 
         manager.appendCamera(camera);
+
+        this._cameraOnBeforeRenderFunc.push(() => {
+            camera.setTarget(manager.rootMesh.getAbsolutePosition());
+        });
+    }
+
+    /**
+     *
+     * Create a skybox for the scene.
+     * @param size size of the skybox
+     * @param textureName path to skybox texture
+     */
+    public createSkyBox(
+        size: number,
+        textureName?: string,
+    ) {
+        if (!this.skyBox) {
+            this.skyBox = new v3DSkyBox(this.scene,
+                textureName ? textureName : "texture/skybox", size);
+        }
     }
 
     /**
@@ -239,6 +293,13 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
                 this._managerRenderFunc(eventData, eventState);
             }
         );
+        // Camera
+        this.scene.onBeforeRenderObservable.add(
+            () => {
+                for (const f of this._cameraOnBeforeRenderFunc)
+                    f();
+            }
+        )
     }
 
     private enableResize() {

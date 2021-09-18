@@ -7,6 +7,8 @@ import {resolve} from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const test_folder = 'test'
+
 const config = {
     mode: 'development',
     devtool: 'inline-source-map',
@@ -17,7 +19,7 @@ const config = {
             type: 'umd',
         },
         filename: '[name].test.js',
-        path: path.resolve(__dirname, 'test'),
+        path: path.resolve(__dirname, test_folder),
     },
     module: {
         rules: [
@@ -53,7 +55,7 @@ const config = {
     devServer: {
         allowedHosts: 'localhost',
         static: {
-            directory: path.resolve(__dirname, 'test'),
+            directory: path.resolve(__dirname, test_folder),
         },
         compress: true,
         port: 8080,
