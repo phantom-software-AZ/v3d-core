@@ -9,8 +9,8 @@ export class v3DSkyBox {
     get skybox(): Mesh {
         return this._skybox;
     }
-    private _skyboxMaterial: BackgroundMaterial;
-    private _skyboxReflectionTexture: CubeTexture;
+    public skyboxMaterial: BackgroundMaterial;
+    public skyboxReflectionTexture: CubeTexture;
 
     public constructor(
         private readonly scene: Scene,
@@ -20,7 +20,7 @@ export class v3DSkyBox {
     ) {
         this._skybox = Mesh.CreateBox("BackgroundSkybox", boxSize, this.scene, undefined, Mesh.BACKSIDE);
         this.createMaterial(textureName);
-        this._skybox.material = this._skyboxMaterial;
+        this._skybox.material = this.skyboxMaterial;
         this._skybox.renderingGroupId = 0;
         this.setupImageProcessing();
     }
@@ -31,15 +31,15 @@ export class v3DSkyBox {
      * @private
      */
     private createMaterial(textureName: string) {
-        this._skyboxMaterial = new BackgroundMaterial("BackgroundSkyboxMaterial", this.scene);
-        this._skyboxMaterial.backFaceCulling = false;
-        // this._skyboxMaterial.useRGBColor = false;
-        this._skyboxMaterial.primaryColor = new Color3(1, 1, 1);
-        this._skyboxMaterial.enableNoise = true;
-        this._skyboxReflectionTexture = new CubeTexture(textureName, this.scene);
-        this._skyboxReflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
-        this._skyboxReflectionTexture.gammaSpace = false;
-        this._skyboxMaterial.reflectionTexture = this._skyboxReflectionTexture;
+        this.skyboxMaterial = new BackgroundMaterial("BackgroundSkyboxMaterial", this.scene);
+        this.skyboxMaterial.backFaceCulling = false;
+        this.skyboxMaterial.useRGBColor = false;
+        this.skyboxMaterial.primaryColor = new Color3(1, 1, 1);
+        this.skyboxMaterial.enableNoise = true;
+        this.skyboxReflectionTexture = new CubeTexture(textureName, this.scene);
+        this.skyboxReflectionTexture.coordinatesMode = Texture.SKYBOX_MODE;
+        this.skyboxReflectionTexture.gammaSpace = false;
+        this.skyboxMaterial.reflectionTexture = this.skyboxReflectionTexture;
     }
 
     /**

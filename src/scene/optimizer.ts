@@ -34,9 +34,10 @@ export class v3DSceneOptimizer {
         this._options = v3DSceneOptimizer.CustomOptimizerOptions();
         this._optimizer = new SceneOptimizer(scene, this._options);
         this._optimizer.targetFrameRate = 60;
-        this._optimizer.trackerDuration = 5000;
+        this._optimizer.trackerDuration = 2000;
 
         this._optimizer.start();
+        this.setupFocusEvents(this._optimizer);
     }
 
     private static CustomOptimizerOptions(): SceneOptimizerOptions {
@@ -45,10 +46,25 @@ export class v3DSceneOptimizer {
         options.addOptimization(new LensFlaresOptimization(0));
         options.addOptimization(new PostProcessesOptimization(1));
         options.addOptimization(new ParticlesOptimization(1));
-        // options.addOptimization(new TextureOptimization(2, 512));
+        options.addOptimization(new TextureOptimization(2, 512));
         options.addOptimization(new RenderTargetsOptimization(3));
         options.addOptimization(new HardwareScalingOptimization(4, 2));
 
         return options;
+    }
+
+    private setupFocusEvents(optimizer: SceneOptimizer) {
+        if (window) {
+            console.log("setupFocusEvents");
+            window.addEventListener('focusin',function(e){
+                console.log("Optimizer start");
+                optimizer.start();
+            }, true);
+            window.addEventListener('focusout',function(e){
+                console.log("Optimizer stop");
+                optimizer.stop();
+                optimizer.reset();
+            }, true);
+        }
     }
 }
