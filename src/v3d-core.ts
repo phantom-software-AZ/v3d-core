@@ -1,3 +1,9 @@
+/** Copyright (c) 2021 The v3d Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import {ArcRotateCamera} from "@babylonjs/core/Cameras/arcRotateCamera";
 import {Scene} from "@babylonjs/core/scene";
 import {Engine} from "@babylonjs/core/Engines/engine";
@@ -12,13 +18,15 @@ import {
 } from "babylon-vrm-loader/src";
 import { GLTFLoader } from "@babylonjs/loaders/glTF/2.0";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
-import {Camera, EventState, IShadowLight, Light, ShadowGenerator } from "@babylonjs/core";
-import {isIShadowLight} from "./utilities/types";
-import {v3DSceneOptimizer} from "./scene/optimizer";
+import {Animation, Animatable, Camera, DefaultRenderingPipeline, EventState, IShadowLight, Light, ShadowGenerator, DepthOfFieldEffectBlurLevel, IAnimationKey, EasingFunction } from "@babylonjs/core";
+import {getAnimationDataType, isIShadowLight} from "./utilities/types";
+import {V3DSceneOptimizer} from "./scene/optimizer";
 import {v3DSkyBox} from "./scene/skybox";
 
 
 export class V3DCore implements GLTFLoaderExtensionObserver {
+
+    public static FRAMERATE = 60;
 
     /**
      * GLTFFileLoader plugin factory
@@ -31,6 +39,19 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
     private _shadowGenerators:
         Map<IShadowLight, ShadowGenerator> =
         new Map<IShadowLight, ShadowGenerator>();
+
+    /**
+     * Scene optimizer
+     */
+    private _sceneOptimizer: V3DSceneOptimizer;
+
+    /**
+     * Rendering pipeline
+     */
+    private readonly _renderingPipeline: DefaultRenderingPipeline;
+    get renderingPipeline(): DefaultRenderingPipeline {
+        return this._renderingPipeline;
+    }
 
     /**
      * Callbacks when loading is done
@@ -67,6 +88,9 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
     private _mainCamera: Camera;
     get mainCamera(): Camera {
         return this._mainCamera;
+    }
+    set mainCamera(value: Camera) {
+        this._mainCamera = value;
     }
 
     public skyBox: v3DSkyBox = null;
@@ -110,6 +134,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
     public constructor(
         readonly engine: Engine,
         public scene?: Scene,
+        camera?: Camera,
     ) {
         // Register
         this.registerVrmPlugin();
@@ -122,6 +147,20 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
 
         this.setupSecodaryAnimation();
         this.enableResize();
+
+        if (camera) {
+            this._mainCamera = camera;
+            this.scene.switchActiveCamera(camera);
+        } else
+            this.addCamera();
+        this._renderingPipeline = new DefaultRenderingPipeline(
+            "defaultPipeline", // The name of the pipeline
+            true, // Do you want the pipeline to use HDR texture?
+            this.scene, // The scene instance
+            [this._mainCamera] // The list of cameras to be attached to
+        );
+        this.setupRenderingPipeline();
+
     }
 
     /**
@@ -143,7 +182,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      * @param color
      */
     public setBackgroundColor(color: Color3) {
-        this.scene.clearColor = Color4.FromColor3(color, this.scene.clearColor.a);
+        this.scene.clearColor = Color4.FromColor3(color, this.scene.clearColor.a).toLinearSpace();
     }
 
     /**
@@ -165,7 +204,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      * Probably has something to do with culling
      * @param radius rotation radius
      */
-    public addCamera(
+    private addCamera(
         radius: number = 3,
     ) {
         const camera = new ArcRotateCamera(
@@ -261,6 +300,84 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         return this._shadowGenerators.get(light);
     }
 
+    /**
+     * Convenience function for starting animation
+     * @param target
+     * @param name
+     * @param property
+     * @param duration
+     * @param from
+     * @param to
+     * @param loopMode
+     * @param easingFunction
+     * @param easingMode
+     */
+    public startQuickAnimation(
+        target: any,
+        name: string,
+        property: string,
+        duration: number,
+        from: any,
+        to: any,
+        loopMode?: number | undefined,
+        easingFunction?: EasingFunction,
+        easingMode?: number
+    ): Animatable {
+        const anim = this.createAnimation(
+            target, name, property,
+            [{frame: 0, value: from}, {frame: duration, value: to}],
+            loopMode, easingFunction, easingMode
+        );
+        return this.scene.beginDirectAnimation(anim[0], [anim[1]], 0, duration,
+            false);
+    }
+
+    /**
+     * Convenience function for creating animation
+     * @param target
+     * @param name
+     * @param property
+     * @param keyFrames
+     * @param loopMode
+     * @param easingFunction
+     * @param easingMode
+     */
+    public createAnimation(
+        target: any,
+        name: string,
+        property: string,
+        keyFrames: Array<IAnimationKey>,
+        loopMode?: number | undefined,
+        easingFunction?: EasingFunction,
+        easingMode?: number,
+    ): [any, Animation] {
+        // Make sure keyFrames is not empty
+        if (keyFrames.length < 1)
+            throw Error("Key Frames empty");
+
+        // Get data type
+        const dataType = getAnimationDataType(keyFrames[0].value);
+        if (dataType === null)
+            throw Error("Cannot determine data type from keyframes!");
+
+        const animation = new Animation(
+            name, property, V3DCore.FRAMERATE,
+            dataType, loopMode);
+        animation.setKeys(keyFrames);
+
+        if (easingFunction) {
+            if (easingMode)
+                easingFunction.setEasingMode(easingMode);
+            animation.setEasingFunction(easingFunction);
+        }
+
+        return [target, animation];
+    }
+
+    public enableOptimizer() {
+        this._sceneOptimizer = new V3DSceneOptimizer(this.scene);
+    }
+
     // Don't make wrappers static, so plugins will always be registered
     /**
      * Wrapper for SceneLoader.AppendAsync.
@@ -336,6 +453,15 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
             SceneLoader.RegisterPlugin(this._vrmFileLoader);
         }
     };
+
+    private setupRenderingPipeline() {
+        this._renderingPipeline.samples = 4;
+        this._renderingPipeline.depthOfFieldEnabled = true;
+        this._renderingPipeline.depthOfFieldBlurLevel = DepthOfFieldEffectBlurLevel.Medium;
+        this._renderingPipeline.depthOfField.focusDistance  = 2000; // distance of the current focus point from the camera in millimeters considering 1 scene unit is 1 meter
+        this._renderingPipeline.depthOfField.focalLength  = 10; // focal length of the camera in millimeters
+        this._renderingPipeline.depthOfField.fStop  = 1.4; // aka F number of the camera defined in stops as it would be on a physical device
+    }
 }
 
 export default V3DCore;

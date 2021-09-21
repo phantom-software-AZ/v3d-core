@@ -1,11 +1,16 @@
+/** Copyright (c) 2021 The v3d Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this file,
+ * You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
 import {HardwareScalingOptimization,
     LensFlaresOptimization,
-    MergeMeshesOptimization, ParticlesOptimization,
-    PostProcessesOptimization,
+    ParticlesOptimization,
     RenderTargetsOptimization, Scene, SceneOptimizer, SceneOptimizerOptions, TextureOptimization } from "@babylonjs/core";
+import {V3DCore} from "../index";
 
-
-export class v3DSceneOptimizer {
+export class V3DSceneOptimizer {
 
     /**
      * Customized scene optimizer options.
@@ -31,9 +36,9 @@ export class v3DSceneOptimizer {
     public constructor(
         private readonly scene: Scene,
     ) {
-        this._options = v3DSceneOptimizer.CustomOptimizerOptions();
+        this._options = V3DSceneOptimizer.CustomOptimizerOptions();
         this._optimizer = new SceneOptimizer(scene, this._options);
-        this._optimizer.targetFrameRate = 60;
+        this._optimizer.targetFrameRate = V3DCore.FRAMERATE;
         this._optimizer.trackerDuration = 2000;
 
         this._optimizer.start();
@@ -42,9 +47,8 @@ export class v3DSceneOptimizer {
 
     private static CustomOptimizerOptions(): SceneOptimizerOptions {
         const options = new SceneOptimizerOptions();
-        options.addOptimization(new MergeMeshesOptimization(0));
         options.addOptimization(new LensFlaresOptimization(0));
-        options.addOptimization(new PostProcessesOptimization(1));
+        // options.addOptimization(new PostProcessesOptimization(1));
         options.addOptimization(new ParticlesOptimization(1));
         options.addOptimization(new TextureOptimization(2, 512));
         options.addOptimization(new RenderTargetsOptimization(3));

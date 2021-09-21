@@ -2,6 +2,12 @@
 
 WebGL-based humanoid model rendering engine.
 
+## Objectives
+
+This project aims to be an easy-to-use library for rendering 3D and pseudo-2D humanoid models. We choose WebGL because of its portability across platforms, as well as the broad support from JavaScript community.
+
+This project will be part of `project Gamma`, a free and open virtual casting solution strives to provide a friendly and safe environment for streamers.
+
 ## Dependencies
 
 - Babylon.js - 5.0.0-alpha40 (included)
@@ -19,13 +25,15 @@ WebGL-based humanoid model rendering engine.
 
 ### In browser
 
-*Some browsers like IE11 are not supported.*
+*Some older browsers may not be supported.*
 
 Please see [examples/browser](./examples/browser) for an example.
 
-### On Babylon.js Playgound
+A more complicated example can be found in [examples/browser/classrom](./examples/browser/classroom).
 
-Currently not possible, since our Babylon.js fork is modified.
+### On Babylon.js Playground
+
+Currently, this is not possible since we use a modified Babylon.js fork.
 
 ### For node.js and webpack
 
