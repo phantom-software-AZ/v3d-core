@@ -81,6 +81,7 @@
     // exclude output dir
     "build",
     "dist",
+    "examples",
     "lib",
     "node_modules",
     "test",

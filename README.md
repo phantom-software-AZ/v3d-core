@@ -21,6 +21,10 @@ This project will be part of `project Gamma`, a free and open virtual casting so
     + [Secondary Animation](https://vrm.dev/univrm/components/univrm_secondary/)
     + [MToonMaterial](https://github.com/phantom-software-AZ/babylon-mtoon-material)
 
+## Demo Viedo
+
+See [this demo video](https://www.youtube.com/watch?v=pQnvU2PVymE).
+
 ## Usage
 
 ### In browser
@@ -29,7 +33,7 @@ This project will be part of `project Gamma`, a free and open virtual casting so
 
 Please see [examples/browser](./examples/browser) for an example.
 
-A more complicated example can be found in [examples/browser/classrom](./examples/browser/classroom).
+A more complicated example can be found in [examples/classroom](./examples/classroom).
 
 ### On Babylon.js Playground
 
