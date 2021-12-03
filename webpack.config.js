@@ -108,7 +108,7 @@ const config = [
             path: resolve(__dirname, 'dist'),
         },
         externals: [
-            function (context, request, callback) {
+            ({context, request}, callback) => {
                 if (/^@babylonjs\/core.*$/.test(request)) {
                     return callback(null, 'var BABYLON');
                 }
