@@ -10,7 +10,7 @@ This project will be part of `project Gamma`, a free and open virtual casting so
 
 ## Dependencies
 
-- Babylon.js - 5.0.0-alpha40 (included)
+- Babylon.js - master (customized, included)
 
 ## Features
 
@@ -66,9 +66,9 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 2. Build Babylon.js
 
    ```s
-   cd lib/Babylon.js && npm install
+   cd lib/Babylon.js && git checkout master-custom && npm install
    cd Tools/Gulp && npm install
-   gulp typescript-libraries
+   gulp typescript-libraries --noGlobalInstall && gulp npmPackages-es6 --noGlobalInstall
    cd ../../../..
    ```
 
