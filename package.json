@@ -1,6 +1,6 @@
 {
   "name": "v3d-core",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "WebGL-based humanoid model rendering engine.",
   "type": "module",
   "main": "dist/v3dcore.es6.js",
@@ -10,7 +10,33 @@
     "lint": "tslint -p .",
     "debug": "webpack-dev-server --config webpack.test.config.js"
   },
-  "keywords": [],
+  "keywords": [
+    "babylon.js",
+    "VRM",
+    "MToon",
+    "WebGL"
+  ],
+  "files": [
+    "dist",
+    "lib/Babylon.js/.temp/packageES6",
+    "src/index.ts",
+    "src/v3d-core.ts",
+    "src/helper.ts",
+    "src/scene",
+    "src/utilities",
+    "src/shader/babylon-mtoon-material/src/shaders/bump-fragment.frag",
+    "src/shader/babylon-mtoon-material/src/shaders/fragment-declaration.frag",
+    "src/shader/babylon-mtoon-material/src/shaders/light-fragment.frag",
+    "src/shader/babylon-mtoon-material/src/shaders/light-fragment-precalculation.frag",
+    "src/shader/babylon-mtoon-material/src/shaders/mtoon.frag",
+    "src/shader/babylon-mtoon-material/src/shaders/mtoon.vert",
+    "src/shader/babylon-mtoon-material/src/shaders/ubo-declaration.vert",
+    "src/shader/babylon-mtoon-material/src/shaders/vertex-declaration.vert",
+    "src/shader/babylon-mtoon-material/src/test",
+    "src/shader/babylon-mtoon-material/src/*.ts",
+    "src/shader/babylon-mtoon-material/*.ts",
+    "src/importer/babylon-vrm-loader/src"
+  ],
   "author": "Phantom Development",
   "license": "MPL-2.0",
   "devDependencies": {
@@ -31,6 +57,7 @@
     "@babylonjs/inspector": "file:lib/Babylon.js/.temp/packageES6/inspector",
     "@babylonjs/loaders": "file:lib/Babylon.js/.temp/packageES6/loaders",
     "@babylonjs/materials": "file:lib/Babylon.js/.temp/packageES6/materialsLibrary",
-    "@babylonjs/serializers": "file:lib/Babylon.js/.temp/packageES6/serializers"
+    "@babylonjs/serializers": "file:lib/Babylon.js/.temp/packageES6/serializers",
+    "babylonjs-gltf2interface": "^5.0.0-alpha.62"
   }
 }
