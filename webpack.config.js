@@ -1,5 +1,4 @@
 import * as path from 'path';
-import * as webpack from 'webpack';
 import { merge } from 'webpack-merge';
 import { fileURLToPath } from 'url';
 import {resolve} from "path";

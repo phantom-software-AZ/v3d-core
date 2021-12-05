@@ -1,7 +1,7 @@
 {
   "name": "v3d-core",
   "version": "1.0.0",
-  "description": "",
+  "description": "WebGL-based humanoid model rendering engine.",
   "type": "module",
   "main": "dist/v3dcore.es6.js",
   "scripts": {
@@ -12,7 +12,7 @@
   },
   "keywords": [],
   "author": "Phantom Development",
-  "license": "Apache-2.0",
+  "license": "MPL-2.0",
   "devDependencies": {
     "@types/node": "^16.7.1",
     "@types/react": "^17.0.19",
