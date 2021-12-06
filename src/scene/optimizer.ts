@@ -6,7 +6,9 @@
 
 import {HardwareScalingOptimization,
     LensFlaresOptimization,
+    Nullable,
     ParticlesOptimization,
+    PostProcessesOptimization,
     RenderTargetsOptimization, Scene, SceneOptimizer, SceneOptimizerOptions, TextureOptimization } from "@babylonjs/core";
 import {V3DCore} from "../index";
 
@@ -35,8 +37,9 @@ export class V3DSceneOptimizer {
 
     public constructor(
         private readonly scene: Scene,
+        options?: Nullable<SceneOptimizerOptions>,
     ) {
-        this._options = V3DSceneOptimizer.CustomOptimizerOptions();
+        this._options = options || V3DSceneOptimizer.CustomOptimizerOptions();
         this._optimizer = new SceneOptimizer(scene, this._options);
         this._optimizer.targetFrameRate = V3DCore.FRAMERATE;
         this._optimizer.trackerDuration = 2000;
@@ -48,10 +51,10 @@ export class V3DSceneOptimizer {
     private static CustomOptimizerOptions(): SceneOptimizerOptions {
         const options = new SceneOptimizerOptions();
         options.addOptimization(new LensFlaresOptimization(0));
-        // options.addOptimization(new PostProcessesOptimization(1));
         options.addOptimization(new ParticlesOptimization(1));
-        options.addOptimization(new TextureOptimization(2, 512));
-        options.addOptimization(new RenderTargetsOptimization(3));
+        options.addOptimization(new TextureOptimization(1, 512));
+        options.addOptimization(new RenderTargetsOptimization(2));
+        options.addOptimization(new PostProcessesOptimization(3));
         options.addOptimization(new HardwareScalingOptimization(4, 2));
 
         return options;

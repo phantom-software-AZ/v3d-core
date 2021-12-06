@@ -1,6 +1,6 @@
 {
   "name": "v3d-core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "WebGL-based humanoid model rendering engine.",
   "type": "module",
   "main": "dist/v3dcore.es6.js",
@@ -32,7 +32,6 @@
     "src/shader/babylon-mtoon-material/src/shaders/mtoon.vert",
     "src/shader/babylon-mtoon-material/src/shaders/ubo-declaration.vert",
     "src/shader/babylon-mtoon-material/src/shaders/vertex-declaration.vert",
-    "src/shader/babylon-mtoon-material/src/test",
     "src/shader/babylon-mtoon-material/src/*.ts",
     "src/shader/babylon-mtoon-material/*.ts",
     "src/importer/babylon-vrm-loader/src"

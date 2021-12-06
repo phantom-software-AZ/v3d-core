@@ -202,7 +202,7 @@ window.onload = async (e) => {
     // Custom Render function
     let gravityPowerCycle = 0;
     const gravityDir = new Vector3(1, 0, 0);
-    v3DCore.updateManagerRenderFunction(
+    v3DCore.updateAfterRenderFunction(
         () => {
             // Simulated wind
             const gravityPowerTerm = (gravityPowerCycle / 1000) * Math.PI;

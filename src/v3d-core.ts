@@ -18,7 +18,7 @@ import {
 } from "babylon-vrm-loader/src";
 import { GLTFLoader } from "@babylonjs/loaders/glTF/2.0";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
-import {Animation, Animatable, Camera, DefaultRenderingPipeline, EventState, IShadowLight, Light, ShadowGenerator, DepthOfFieldEffectBlurLevel, IAnimationKey, EasingFunction } from "@babylonjs/core";
+import {Animation, Animatable, Camera, DefaultRenderingPipeline, EventState, IShadowLight, Light, ShadowGenerator, DepthOfFieldEffectBlurLevel, IAnimationKey, EasingFunction, Nullable, SceneOptimizerOptions } from "@babylonjs/core";
 import {getAnimationDataType, isIShadowLight} from "./utilities/types";
 import {V3DSceneOptimizer} from "./scene/optimizer";
 import {v3DSkyBox} from "./scene/skybox";
@@ -72,16 +72,23 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         this._onLoadCompleteCallbacks = [];
     }
 
-    private _managerRenderFunc:
+    private _beforeRenderFunc:
+        (eventData: Scene, eventState: EventState) => void = () => {};
+    private _afterRenderFunc:
         (eventData: Scene, eventState: EventState) => void = () => {
         for (const manager of this.loadedVRMManagers) {
             manager.update(this.engine.getDeltaTime());
         }
     };
 
-    public updateManagerRenderFunction(
+    public updateBeforeRenderFunction(
         func: (eventData: Scene, eventState: EventState) => void) {
-        this._managerRenderFunc = func;
+        this._beforeRenderFunc = func;
+    }
+
+    public updateAfterRenderFunction(
+        func: (eventData: Scene, eventState: EventState) => void) {
+        this._afterRenderFunc = func;
     }
 
     private _cameraOnBeforeRenderFunc: Function[] = [];
@@ -145,7 +152,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         else
             this.engine = this.scene.getEngine();
 
-        this.setupSecodaryAnimation();
+        this.setupObservable();
         this.enableResize();
 
         if (camera) {
@@ -160,7 +167,6 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
             [this._mainCamera] // The list of cameras to be attached to
         );
         this.setupRenderingPipeline();
-
     }
 
     /**
@@ -296,7 +302,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      * Get corresponding shadow generator for light.
      * @param light Light to get shadow generator
      */
-    public getShadownGenerator(light: IShadowLight) {
+    public getShadownGenerator(light: IShadowLight): Nullable<ShadowGenerator> {
         return this._shadowGenerators.get(light);
     }
 
@@ -374,8 +380,8 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         return [target, animation];
     }
 
-    public enableOptimizer() {
-        this._sceneOptimizer = new V3DSceneOptimizer(this.scene);
+    public enableOptimizer(options?: SceneOptimizerOptions) {
+        this._sceneOptimizer = new V3DSceneOptimizer(this.scene, options);
     }
 
     // Don't make wrappers static, so plugins will always be registered
@@ -414,11 +420,10 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      * Set up for time update.
      * @private
      */
-    private setupSecodaryAnimation() {
-        // Update secondary animation
+    private setupObservable() {
         this.scene.onBeforeRenderObservable.add(
             (eventData: Scene, eventState: EventState) => {
-                this._managerRenderFunc(eventData, eventState);
+                this._beforeRenderFunc(eventData, eventState);
             }
         );
         // Camera
@@ -428,6 +433,12 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
                     f();
             }
         )
+        // Update secondary animation
+        this.scene.onAfterRenderObservable.add(
+            (eventData: Scene, eventState: EventState) => {
+                this._afterRenderFunc(eventData, eventState);
+            }
+        );
     }
 
     private enableResize() {

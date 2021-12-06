@@ -4,7 +4,7 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-import {AbstractMesh, Mesh, ShadowGenerator, Skeleton, SkeletonViewer, TransformNode } from "@babylonjs/core";
+import {AbstractMesh, Mesh, Nullable, ShadowGenerator, Skeleton, SkeletonViewer, TransformNode } from "@babylonjs/core";
 import V3DCore from "./v3d-core";
 
 export class V3DHelper {
@@ -20,10 +20,10 @@ export class V3DHelper {
      * @param nodeName
      */
     public addNodeToShadowCasterByName(
-        shadowGenerator: ShadowGenerator,
+        shadowGenerator: Nullable<ShadowGenerator>,
         nodeName: string
     ) {
-        shadowGenerator.addShadowCaster(this.core.scene.getNodeByName(nodeName) as Mesh);
+        shadowGenerator?.addShadowCaster(this.core.scene.getNodeByName(nodeName) as Mesh);
     }
 
     /**
@@ -32,9 +32,10 @@ export class V3DHelper {
      * @param nodeName
      */
     public addNodeToShadowCasterContainsName(
-        shadowGenerator: ShadowGenerator,
+        shadowGenerator: Nullable<ShadowGenerator>,
         nodeName: string
     ) {
+        if (!shadowGenerator) return;
         for (const node of this.core.scene.getNodes()) {
             if (node && node.name.includes(nodeName)) {
                 shadowGenerator.addShadowCaster(node as Mesh);
