@@ -1,6 +1,6 @@
 {
   "name": "v3d-core",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "WebGL-based humanoid model rendering engine.",
   "type": "module",
   "main": "dist/v3dcore.es6.js",
@@ -34,7 +34,6 @@
     "dist/src/importer/babylon-vrm-loader/src",
     "dist/src/scene",
     "dist/src/shader/babylon-mtoon-material/src",
-    "dist/src/shader/babylon-mtoon-material/src/shaders",
     "dist/src/utilities",
     "lib/Babylon.js/.temp/packageES6"
   ],

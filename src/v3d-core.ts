@@ -15,7 +15,7 @@ import {
     VRMFileLoader,
     VRMLoaderExtension,
     VRMManager
-} from "babylon-vrm-loader/src";
+} from "./importer/babylon-vrm-loader/src";
 import { GLTFLoader } from "@babylonjs/loaders/glTF/2.0";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
 import {Animation, Animatable, Camera, DefaultRenderingPipeline, EventState, IShadowLight, Light, ShadowGenerator, DepthOfFieldEffectBlurLevel, IAnimationKey, EasingFunction, Nullable, SceneOptimizerOptions } from "@babylonjs/core";

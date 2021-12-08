@@ -15,10 +15,6 @@ const baseConfig = {
     module: {
         rules: [
             {
-                test: /\.(vert|frag)$/,
-                type: 'asset/source',
-            },
-            {
                 test: /\.ts$/,
                 use: 'ts-loader',
             },
@@ -32,11 +28,7 @@ const baseConfig = {
     },
     resolve: {
         modules: [path.resolve(__dirname, 'node_modules')],
-        extensions: ['.js', '.ts', '.vert', '.frag'],
-        alias: {
-            "babylon-vrm-loader": path.resolve(__dirname, "src/importer/babylon-vrm-loader"),
-            "babylon-mtoon-material": path.resolve(__dirname, "src/shader/babylon-mtoon-material")
-        },
+        extensions: ['.js', '.ts'],
         symlinks: false,
     },
     experiments: {
