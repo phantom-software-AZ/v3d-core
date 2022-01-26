@@ -33,6 +33,16 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
      * @private
      */
     private _vrmFileLoader = new VRMFileLoader();
+
+    // Whether starts spring bones animation automatically
+    private _springBonesAutoUpdate = true;
+    get springBonesAutoUpdate(): boolean {
+        return this._springBonesAutoUpdate;
+    }
+    set springBonesAutoUpdate(value: boolean) {
+        this._springBonesAutoUpdate = value;
+    }
+
     /**
      * Shadow generators
      */
@@ -77,7 +87,8 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
     private _afterRenderFunc:
         (eventData: Scene, eventState: EventState) => void = () => {
         for (const manager of this.loadedVRMManagers) {
-            manager.update(this.engine.getDeltaTime());
+            if (this._springBonesAutoUpdate)
+                manager.update(this.engine.getDeltaTime());
         }
     };
 
