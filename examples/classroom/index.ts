@@ -44,11 +44,11 @@ if (Engine.isSupported()) {
 
 window.onload = async (e) => {
     console.log("Onload");
-    const vrmFile = 'testfiles/2078913627571329107.vrm';
+    const vrmFile = 'testfiles/1712943613539182472.vrm';
     const vrmFile2 = 'testfiles/7822444336497004526.vrm';
     const fingers = ["Thumb", "Index", "Middle", "Ring", "Little"]
     const parts = ["Proximal", "Intermediate", "Distal"]
-    const initialDelay = 6000;
+    const initialDelay = 1000;
 
     // Create v3d-core
     const scene = new Scene(engine);
@@ -229,17 +229,6 @@ window.onload = async (e) => {
             v3DCore.scene.render();
     });
 
-    // Manual fix for problematic meshes
-    function removeMeshes(a: number, b: number) {
-        const bodyMesh = vrmManager.rootMesh.getChildTransformNodes(true)[1].getChildTransformNodes(true)[0] as Mesh;
-        const bodyMeshIndices = bodyMesh.getIndices(true, true);
-        for (let i = a; i < b; i++) { // remove some vertices
-            bodyMeshIndices[i] = 0;
-        }
-        bodyMesh.setIndices(bodyMeshIndices);
-    }
-    removeMeshes(18900, 19200);
-
     // Scene and models setup
     const frontDoor = v3DCore.scene.getNodeByName("porte") as TransformNode;
     setupScene();
@@ -381,12 +370,12 @@ window.onload = async (e) => {
 
         // Model Transformation
         const skeletonViewer = v3DHelper.showSkeletonDebug(
-            (vrmManager.rootMesh.getChildTransformNodes()[1] as Mesh).skeleton,
+            vrmManager.rootMesh.getChildMeshes()[1].skeleton,
             vrmManager.rootMesh);
         skeletonViewer.isEnabled = false;
         vrmManager.rootMesh.position = new Vector3(3.05, 0, -4);
         vrmManager.rootMesh.addRotation(0, -1.5708, 0);
-        vrmManager.rootMesh.scaling = new Vector3(1.1, 1.2, -1.1);
+        vrmManager.rootMesh.scaling = new Vector3(1.1, 1.3, -1.1);
 
         // Work with HumanoidBone
         vrmManager.humanoidBone.head.addRotation(0.699, 0.349, 0);

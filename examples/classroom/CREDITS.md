@@ -6,5 +6,5 @@
 
 ## Model files
 
- - `two` By `chicken mic` From VRoidHub
+ - `草羽エル/ 【配布】【改変OK】モノ草羽エル2.0【LOW】` by `草羽エル-Kusaha.El-` From VRoid Hub
  - `諾耶拉/ ノエラ` By `chonger` From VRoidHub
