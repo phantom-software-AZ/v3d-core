@@ -54,20 +54,9 @@ const config = [
             filename: '[name].module.js',
             path: path.resolve(__dirname, 'dist'),
         },
-        // externals: [
-        //     /^@babylonjs.*$/,
-        // ],
-        optimization: {
-            splitChunks: {
-                cacheGroups: {
-                    babylonjs: {
-                        test: /[\\/]node_modules[\\/]@babylonjs[\\/]/,
-                        name: 'babylonjs',
-                        chunks: 'all',
-                    },
-                },
-            },
-        },
+        externals: [
+            /^@babylonjs.*$/,
+        ],
     }),
     // ES6
     merge(baseConfig, {

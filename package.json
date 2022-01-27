@@ -1,6 +1,6 @@
 {
   "name": "v3d-core",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "WebGL-based humanoid model rendering engine.",
   "type": "module",
   "main": "dist/v3dcore.es6.js",
@@ -34,8 +34,7 @@
     "dist/src/importer/babylon-vrm-loader/src",
     "dist/src/scene",
     "dist/src/shader/babylon-mtoon-material/src",
-    "dist/src/utilities",
-    "lib/Babylon.js/.temp/packageES6"
+    "dist/src/utilities"
   ],
   "author": "Phantom Development",
   "license": "MPL-2.0",
@@ -52,12 +51,12 @@
     "webpack-dev-server": "^4.0.0"
   },
   "dependencies": {
-    "@babylonjs/core": "file:lib/Babylon.js/.temp/packageES6/core",
-    "@babylonjs/gui": "file:lib/Babylon.js/.temp/packageES6/gui",
-    "@babylonjs/inspector": "file:lib/Babylon.js/.temp/packageES6/inspector",
-    "@babylonjs/loaders": "file:lib/Babylon.js/.temp/packageES6/loaders",
-    "@babylonjs/materials": "file:lib/Babylon.js/.temp/packageES6/materialsLibrary",
-    "@babylonjs/serializers": "file:lib/Babylon.js/.temp/packageES6/serializers",
+    "@babylonjs/core": "^5.0.0-alpha.62",
+    "@babylonjs/gui": "^5.0.0-alpha.62",
+    "@babylonjs/inspector": "^5.0.0-alpha.62",
+    "@babylonjs/loaders": "^5.0.0-alpha.62",
+    "@babylonjs/materials": "^5.0.0-alpha.62",
+    "@babylonjs/serializers": "^5.0.0-alpha.62",
     "babylonjs-gltf2interface": "^5.0.0-alpha.62"
   }
 }
