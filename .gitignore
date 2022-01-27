@@ -109,3 +109,6 @@ typings/
 dist/src/
 test/testfiles/
 index-test-*.ts
+/test2/
+/test/classroom/
+/test/texture/

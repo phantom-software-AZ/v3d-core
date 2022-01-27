@@ -20,8 +20,8 @@ const debug = false;
 import {Engine} from "@babylonjs/core/Engines/engine";
 import {Color3, Curve3, Vector3} from "@babylonjs/core/Maths/math";
 
-import {V3DCore, V3DHelper} from "./index";
-import {VRMManager} from "babylon-vrm-loader/src";
+import {V3DCore, V3DHelper} from "v3d-core/dist/src";
+import {VRMManager} from "v3d-core/dist/src/importer/babylon-vrm-loader/src";
 import {AbstractMesh, DirectionalLight, HemisphericLight, Mesh, PointLight,
      StandardMaterial, Animation, EasingFunction,
     Texture, Node, TransformNode, VolumetricLightScatteringPostProcess, AnimationGroup,

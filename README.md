@@ -8,10 +8,6 @@ This project aims to be an easy-to-use library for rendering 3D and pseudo-2D hu
 
 This project will be part of `project Gamma`, a free and open virtual casting solution strives to provide a friendly and safe environment for streamers.
 
-## Dependencies
-
-- Babylon.js - master (customized, included)
-
 ## Features
 
 - Contains one simple API for interacting with scene and models
@@ -21,11 +17,13 @@ This project will be part of `project Gamma`, a free and open virtual casting so
     + [Secondary Animation](https://vrm.dev/univrm/components/univrm_secondary/)
     + [MToonMaterial](https://github.com/phantom-software-AZ/babylon-mtoon-material)
 
-## Demo Viedo
-
-See [this demo video](https://www.youtube.com/watch?v=pQnvU2PVymE).
-
 ## Usage
+
+### Install from NPM
+
+```s
+npm install v3d-core
+```
 
 ### In browser
 
@@ -54,7 +52,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md).
 1. Clone this repo and submodules:
 
    ```s
-   $ git clone https://github.com/phantom-software-AZ/v3d-core.git --recurse-submodules
+   git clone https://github.com/phantom-software-AZ/v3d-core.git --recurse-submodules
    ```
 
    If your Internet connection is slow, try the following instead:
@@ -89,6 +87,10 @@ $ npm run debug
 ```
 
 The debug page can be opened in any browser with `http://localhost:8080/`.
+
+## Demo Viedo
+
+See [this demo video](https://www.youtube.com/watch?v=pQnvU2PVymE).
 
 ## Credits
 
