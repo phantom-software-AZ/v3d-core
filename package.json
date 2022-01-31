@@ -1,8 +1,7 @@
 {
   "name": "v3d-core",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "WebGL-based humanoid model rendering engine.",
-  "type": "module",
   "main": "dist/v3dcore.es6.js",
   "scripts": {
     "test": "echo \\\"Error: no test2 specified\\\" && exit 1",

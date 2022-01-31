@@ -1,11 +1,6 @@
-import * as path from 'path';
-import { merge } from 'webpack-merge';
-import { fileURLToPath } from 'url';
-import {resolve} from "path";
-import terser from 'terser-webpack-plugin';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const path = require( 'path' );
+const Merge = require('webpack-merge');
+const terser = require('terser-webpack-plugin');
 
 const baseConfig = {
     mode: 'production',
@@ -45,7 +40,7 @@ const baseConfig = {
 
 const config = [
     // UMD
-    merge(baseConfig, {
+    Merge.merge(baseConfig, {
         output: {
             library: {
                 name: 'v3d-core',
@@ -59,7 +54,7 @@ const config = [
         ],
     }),
     // ES6
-    merge(baseConfig, {
+    Merge.merge(baseConfig, {
         output: {
             library: {
                 // name: 'v3d-core',
@@ -78,14 +73,14 @@ const config = [
         ],
     }),
     // browser global
-    merge(baseConfig, {
+    Merge.merge(baseConfig, {
         output: {
             library: {
                 name: 'v3d-core',
                 type: 'window',
             },
             filename: '[name].js',
-            path: resolve(__dirname, 'dist'),
+            path: path.resolve(__dirname, 'dist'),
         },
         externals: [
             ({context, request}, callback) => {
@@ -105,4 +100,4 @@ const config = [
     }),
 ];
 
-export default config;
+module.exports = config;
