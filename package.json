@@ -1,6 +1,6 @@
 {
   "name": "v3d-core",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "WebGL-based humanoid model rendering engine.",
   "main": "dist/v3dcore.es6.js",
   "scripts": {

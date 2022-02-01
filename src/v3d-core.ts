@@ -18,7 +18,7 @@ import {
 } from "./importer/babylon-vrm-loader/src";
 import { GLTFLoader } from "@babylonjs/loaders/glTF/2.0";
 import { HemisphericLight } from "@babylonjs/core/Lights/hemisphericLight";
-import {Animation, Animatable, Camera, DefaultRenderingPipeline, EventState, IShadowLight, Light, ShadowGenerator, DepthOfFieldEffectBlurLevel, IAnimationKey, EasingFunction, Nullable, SceneOptimizerOptions } from "@babylonjs/core";
+import {Animation, Animatable, Camera, DefaultRenderingPipeline, EventState, IShadowLight, ShadowGenerator, DepthOfFieldEffectBlurLevel, IAnimationKey, EasingFunction, Nullable, SceneOptimizerOptions } from "@babylonjs/core";
 import {getAnimationDataType, isIShadowLight} from "./utilities/types";
 import {V3DSceneOptimizer} from "./scene/optimizer";
 import {v3DSkyBox} from "./scene/skybox";
@@ -463,6 +463,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
         shadowGenerator.filteringQuality = ShadowGenerator.QUALITY_HIGH;
     }
 
+    // TODO Unregister
     private registerVrmExtension() {
         // ローダーに登録する
         GLTFLoader.RegisterExtension(VRMLoaderExtension.NAME, (loader) => {
@@ -471,7 +472,7 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
     }
 
     private registerVrmPlugin() {
-        if (SceneLoader) {
+        if (SceneLoader && SceneLoader.GetPluginForExtension('.vrm').name === 'babylon.js') {
             SceneLoader.RegisterPlugin(this._vrmFileLoader);
         }
     };
