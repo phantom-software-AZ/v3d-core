@@ -203,6 +203,14 @@ export class V3DCore implements GLTFLoaderExtensionObserver {
     }
 
     /**
+     * Set background color from hex string.
+     * @param hex Hex color string
+     */
+    public setBackgroundColorHex(hex: string) {
+        this.setBackgroundColor(Color3.FromHexString(hex));
+    }
+
+    /**
      * Add an ambient light.
      * @param color color of the light
      */
