@@ -5,7 +5,7 @@
 * Bug fixes
 * Documentation fixes
 
-For new feature additions (e.g., new graphs and calculators), please open an issue first to discuss the feature.
+For new feature additions, please open an issue first to discuss the feature.
 
 ## Submit your own code
 

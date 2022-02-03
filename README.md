@@ -6,8 +6,6 @@ WebGL-based humanoid model rendering engine.
 
 This project aims to be an easy-to-use library for rendering 3D and pseudo-2D humanoid models. We choose WebGL because of its portability across platforms, as well as the broad support from JavaScript community.
 
-This project will be part of `project Gamma`, a free and open virtual casting solution strives to provide a friendly and safe environment for streamers.
-
 ## Features
 
 - Contains one simple API for interacting with scene and models
@@ -88,7 +86,7 @@ $ npm run debug
 
 The debug page can be opened in any browser with `http://localhost:8080/`.
 
-## Demo Viedo
+## Demo Video
 
 See [this demo video](https://www.youtube.com/watch?v=pQnvU2PVymE).
 
